@@ -1,6 +1,5 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include <WiFiClientSecure.h>
 #include <WakeOnLan.h>
 #include <WiFiUdp.h>
 #include <ESP32Ping.h>
