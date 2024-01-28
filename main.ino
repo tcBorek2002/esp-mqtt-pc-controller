@@ -15,6 +15,7 @@ const char *mqtt_broker = "mqtt.emphisia.nl";
 const char *mqtt_topic_command = "pc/" LOCATION "/command";
 const char *mqtt_topic_pc_status = "pc/" LOCATION "/status";
 const char *mqtt_topic_esp_status = "esp/" LOCATION "/status";
+const char *mqtt_topic_esp_poll = "esp/" LOCATION "/poll";
 const char *mqtt_username = "username";
 const char *mqtt_password = "password";
 const int mqtt_port = 1883;
@@ -72,6 +73,7 @@ void connectToMQTT() {
           if (mqtt_client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
             Serial.println("Connected to MQTT broker");
             mqtt_client.subscribe(mqtt_topic_command);
+            mqtt_client.subscribe(mqtt_topic_esp_poll);
             mqtt_client.publish(mqtt_topic_esp_status, "signin");  // Publish message upon connection
         } else {
             Serial.print("Failed to connect to MQTT broker, rc=");
@@ -85,7 +87,13 @@ void connectToMQTT() {
 void mqttCallback(char *topic, byte *payload, unsigned int length) {
     Serial.print("Message received on topic: ");
     Serial.println(topic);
-    if(strcmp(topic, mqtt_topic_command) == 0) {
+    // Received Poll message
+    if(strcmp(topic, mqtt_topic_esp_poll) == 0) {
+      firstRun = true; // Send the pc state on next timer
+      mqtt_client.publish(mqtt_topic_esp_status, "poll-checkin");
+    }
+    // Received command
+    else if(strcmp(topic, mqtt_topic_command) == 0) {
       String command = "";
       Serial.print("Received the following command: ");
       for (unsigned int i = 0; i < length; i++) {
