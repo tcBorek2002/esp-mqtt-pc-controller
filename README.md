@@ -1,5 +1,5 @@
 # esp-mqtt-pc-controller
-Code for an ESP32 that connects to an MQTT broker. Can be used to turn on the PC using WoL and pings the PC to communicate whether the PC is turned on. Makes use of WakeOnLan.
+Code for an ESP32 that connects to an MQTT broker. Can be used to turn on a PC using WoL and pings the PC to communicate whether the PC is turned on. Makes use of WakeOnLan.
 
 # Getting started
 ## Libraries
@@ -24,6 +24,6 @@ Set the following variables in the main.ino file:
 Location is the name you have set in the configuration.   
 The topics used are:
 * **esp/{location}/status**: Used to indicate ESP status. ESP will send "signin" on startup or connection and ESP will send "checkin" every hour.
-* **esp/{location}/poll**: Used to poll the ESP, just send any payload to this topic. ESP will send "poll-checkin" on the esp status topic. It will also send the latest PC status. This can be done to check whether the ESP is still online and to manually get the latest PC status.
+* **esp/{location}/poll**: Used to poll the ESP, just send any payload to this topic. ESP will send "poll-checkin" on the esp status topic. It will also send the latest PC status. This can be used to check whether the ESP is still online and to manually get the latest PC status.
 * **pc/{location}/command**: Used to send the WoL package. Send "start" to this topic to send the WoL package.
 * **pc/{location}/status**: Used to indicate PC status. Can be "online" or "offline". The ESP will ping the PC every 10 seconds. Note that an update is sent to the broker only when the state is changed.
