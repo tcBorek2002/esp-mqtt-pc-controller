@@ -4,6 +4,7 @@
 #include <WiFiUdp.h>
 #include <ESP32Ping.h>
 #include <Ticker.h>
+#include <WiFiClientSecure.h>
 
 // ESP Location name
 #define LOCATION "name"
@@ -18,7 +19,11 @@ const char *mqtt_topic_esp_status = "esp/" LOCATION "/status";
 const char *mqtt_topic_esp_poll = "esp/" LOCATION "/poll";
 const char *mqtt_username = "username";
 const char *mqtt_password = "password";
-const int mqtt_port = 1883;
+const int mqtt_port = 8883;
+const char *root_ca = \
+"-----BEGIN CERTIFICATE-----\n"
+"CERTIFICATE CONTENT\n"
+"-----END CERTIFICATE-----\n";
 
 // Don't change these
 bool previousPingState = false;
@@ -31,7 +36,7 @@ Ticker timerPing;
 Ticker timerCheckin;
 
 // WiFi and MQTT client initialization
-WiFiClient esp_client;
+WiFiClientSecure esp_client;
 PubSubClient mqtt_client(esp_client);
 WiFiUDP UDP;
 
@@ -46,6 +51,7 @@ void setup() {
     Serial.begin(115200);
     Serial.println("BORTECH PRODUCT");
     connectToWiFi();
+    esp_client.setCACert(root_ca);
 
     mqtt_client.setServer(mqtt_broker, mqtt_port);
     mqtt_client.setKeepAlive(60);
