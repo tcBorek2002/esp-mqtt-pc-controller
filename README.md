@@ -16,7 +16,8 @@ Set the following variables in the main.ino file:
 * *mqtt_broker: Hostname of the MQTT broker
 * *mqtt_username: Username for MQTT
 * *mqtt_password: Password for MQTT
-* mqtt_port: Port to use for MQTT
+* mqtt_port: Port to use for MQTT (Default for unencrypted: 1883, encrypted: 8883)
+* *root_ca: Certificate to use for SSL
 * *MACAddress: MAC Address to send WoL package to
 * ip: IP Address to ping. Note the format. Example: (192, 168, 1, 10)
 ### Upload the code and enjoy
